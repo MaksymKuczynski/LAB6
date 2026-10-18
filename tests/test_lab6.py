@@ -1,12 +1,13 @@
 """
 Юніт-тести для Лабораторної роботи № 6.
 
-Студенти повинні доповнити цей файл тестами для своїх рішень.
+Містить тести для перевірки функціональності пакета card_game.
 """
 import unittest
 
-# TODO: Імпортуйте функції для тестування з вашого пакета
-# from src.назва_вашого_пакета.назва_модуля import ваша_функція
+from card_game.deck import create_deck, shuffle_deck
+from card_game.dealing import deal_cards
+
 
 class TestLab6(unittest.TestCase):
 
@@ -14,20 +15,32 @@ class TestLab6(unittest.TestCase):
         """Приклад тестового випадку."""
         self.assertEqual(2 + 2, 4)
 
-    # TODO: Додайте тестові випадки для функцій у вашому пакеті.
-    # def test_your_function(self):
-    #     """Тестовий випадок для вашої_функції."""
-    #     # Приклад перевірки
-    #     self.assertEqual(ваша_функція(вхідні_дані), очікуваний_результат)
+    def test_create_deck(self):
+        """Тестовий випадок для функції create_deck."""
+        deck = create_deck()
+        self.assertEqual(len(deck), 52)
+        self.assertIn('A♠', deck)
 
-    # def test_another_function_with_edge_cases(self):
-    #     """Тестовий випадок для іншої_функції з граничними випадками."""
-    #     # Тест з нулем
-    #     self.assertEqual(інша_функція(0), очікуваний_для_нуля)
-    #     # Тест з від'ємним числом
-    #     self.assertEqual(інша_функція(-5), очікуваний_для_від'ємного)
-    #     # Тест з великим числом
-    #     self.assertEqual(інша_функція(1000), очікуваний_для_великого)
+    def test_shuffle_deck(self):
+        """Тестовий випадок для функції shuffle_deck."""
+        deck = create_deck()
+        shuffled = shuffle_deck(deck)
+        self.assertEqual(len(shuffled), 52)
+
+    def test_deal_cards(self):
+        """Тестовий випадок для функції deal_cards."""
+        deck = create_deck()
+        hands = deal_cards(deck, players_count=2, cards_per_player=5)
+        self.assertEqual(len(hands), 2)
+        self.assertEqual(len(hands["Гравець 1"]), 5)
+        self.assertEqual(len(deck), 42)  # 52 - 10 = 42
+
+    def test_deal_cards_edge_cases(self):
+        """Тестовий випадок для deal_cards з граничними випадками та помилками."""
+        deck = create_deck()
+        # Спроба роздати більше карт, ніж є в колоді (ValueError)
+        with self.assertRaises(ValueError):
+            deal_cards(deck, players_count=10, cards_per_player=10)
 
 
 if __name__ == '__main__':
