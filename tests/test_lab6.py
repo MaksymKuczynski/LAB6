@@ -4,9 +4,13 @@
 Містить тести для перевірки функціональності пакета card_game.
 """
 import unittest
+import sys
+import os
 
-from card_game.deck import create_deck, shuffle_deck
-from card_game.dealing import deal_cards
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../src')))
+
+from card_game.deck import create_deck, shuffle_deck # type: ignore
+from card_game.dealing import deal_cards # type: ignore
 
 
 class TestLab6(unittest.TestCase):
